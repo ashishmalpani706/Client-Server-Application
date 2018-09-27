@@ -3,6 +3,7 @@ import java.io.InputStreamReader;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.SocketException;
 
 public class Server {
     private ServerSocket myServer;
@@ -18,13 +19,26 @@ public class Server {
 
     private void listen() throws Exception {
         String data = null;
-        Socket client = this.myServer.accept();
-        String clientAddress = client.getInetAddress().getHostAddress();
-        System.out.println("Connection from: "+clientAddress);
-        BufferedReader br = new BufferedReader(new InputStreamReader(client.getInputStream()));
+        Socket client;
+        String clientAddress;
+        BufferedReader br;
 
-        while((data = br.readLine()) != null) {
-            System.out.println("Message from " + clientAddress + ": " + data);
+        while (true) {
+            System.out.println("Waiting for connection");
+            client = this.myServer.accept();
+            clientAddress = client.getInetAddress().getHostAddress();
+            System.out.println("Connection from: " + clientAddress);
+            br = new BufferedReader(new InputStreamReader(client.getInputStream()));
+
+            try {
+                while ((data = br.readLine()) != null) {
+                    System.out.println("Message from " + clientAddress + ": " + data);
+                }
+            } catch (SocketException e) {
+                System.out.println("Connection Terminated");
+                client.close();
+                br.close();
+            }
         }
     }
 
