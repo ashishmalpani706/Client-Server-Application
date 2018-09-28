@@ -1,4 +1,6 @@
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.InetAddress;
 import java.net.Socket;
@@ -11,13 +13,35 @@ public class Client {
         this.scanner = new Scanner(System.in);
     }
     private void start() throws IOException {
-        String input;
-        while (true) {
-            input = scanner.nextLine();
-            PrintWriter out = new PrintWriter(this.socket.getOutputStream(), true);
-            out.println(input);
-            out.flush();
-        }
+        String data;
+        String input, request;
+        PrintWriter out = new PrintWriter(this.socket.getOutputStream(), true);
+        BufferedReader br = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+
+        System.out.println("Please enter the name of the file: ");
+        input = scanner.nextLine();
+
+        request = "SET "+input+" HTTP/1.0";
+        System.out.println("Sending "+request);
+        out.println(request);
+        out.flush();
+        System.out.println(br.readLine());
+
+        request = "GET "+input+" HTTP/1.0";
+        System.out.println("Sending "+request);
+        out.println(request);
+        out.flush();
+        System.out.println(br.readLine());
+
+//        while ((data = br.readLine()) != null) {
+//            System.out.println(data);
+//        }
+
+//        while (true) {
+//            input = scanner.nextLine();
+//            out.println(input);
+//            out.flush();
+//        }
     }
 
     public static void main(String[] args) throws Exception {
