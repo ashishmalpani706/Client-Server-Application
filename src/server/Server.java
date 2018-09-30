@@ -50,14 +50,19 @@ public class Server {
                             out.flush();
                         }
                         else {
-                            byte[] mybytearray  = new byte[(int)myFile.length()];
+                            byte [] myByteArray  = new byte [(int)myFile.length()];
                             fis = new FileInputStream(myFile);
                             bis = new BufferedInputStream(fis);
-                            bis.read(mybytearray,0,mybytearray.length);
+                            bis.read(myByteArray,0,myByteArray.length);
                             os = client.getOutputStream();
-                            System.out.println("Sending " + parse(data) + "(" + mybytearray.length + " bytes)");
-                            os.write(mybytearray,0,mybytearray.length);
+                            System.out.println("Sending " + parse(data) + "(" + myByteArray.length + " bytes)");
+                            os.write(myByteArray,0,myByteArray.length);
                             os.flush();
+                            System.out.println("Done.");
+
+                            bis.close();
+                            os.close();
+                            client.close();
                         }
                     }
                 }

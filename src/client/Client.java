@@ -1,10 +1,4 @@
-import java.io.BufferedOutputStream;
-import java.io.FileOutputStream;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.InputStream;
-import java.io.PrintWriter;
+import java.io.*;
 import java.net.InetAddress;
 import java.net.Socket;
 import java.util.Scanner;
@@ -38,10 +32,10 @@ public class Client {
         System.out.println("Sending "+request);
         out.println(request);
         out.flush();
-        data = br.readLine();
-        System.out.println(data);
+        data = "";//br.readLine();
+        //System.out.println(data);
         if (!("Result: HTTP/1.0 404 Not Found".equals(data))) {
-            byte [] mybytearray  = new byte [100000];
+            byte [] mybytearray  = new byte [6022386]; //can change file size if needed
             InputStream is = socket.getInputStream();
             fos = new FileOutputStream(input);
             bos = new BufferedOutputStream(fos);
@@ -58,6 +52,10 @@ public class Client {
             bos.flush();
             System.out.println("File " + input
                     + " downloaded (" + current + " bytes read)");
+
+            fos.close();
+            bos.close();
+            if (socket != null) socket.close();
         }
 
 //        while ((data = br.readLine()) != null) {
