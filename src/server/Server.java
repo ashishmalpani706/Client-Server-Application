@@ -50,6 +50,10 @@ public class Server {
                             out.flush();
                         }
                         else {
+                            System.out.println("Response: " +http200);
+                            out.println("Result: " + http200);
+                            out.flush();
+
                             byte [] myByteArray  = new byte [(int)myFile.length()];
                             fis = new FileInputStream(myFile);
                             bis = new BufferedInputStream(fis);
@@ -58,7 +62,7 @@ public class Server {
                             System.out.println("Sending " + parse(data) + "(" + myByteArray.length + " bytes)");
                             os.write(myByteArray,0,myByteArray.length);
                             os.flush();
-                            System.out.println("Done.");
+                            System.out.println("Finished transfer!");
 
                             bis.close();
                             os.close();

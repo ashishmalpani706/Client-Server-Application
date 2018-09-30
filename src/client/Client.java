@@ -13,7 +13,7 @@ public class Client {
         String data;
         String input, request;
         int bytesRead;
-        int current = 0;
+        int current;
         FileOutputStream fos;
         BufferedOutputStream bos;
         PrintWriter out = new PrintWriter(this.socket.getOutputStream(), true);
@@ -32,8 +32,8 @@ public class Client {
         System.out.println("Sending "+request);
         out.println(request);
         out.flush();
-        data = "";//br.readLine();
-        //System.out.println(data);
+        data = br.readLine();
+        System.out.println(data);
         if (!("Result: HTTP/1.0 404 Not Found".equals(data))) {
             byte [] mybytearray  = new byte [6022386]; //can change file size if needed
             InputStream is = socket.getInputStream();
@@ -57,6 +57,7 @@ public class Client {
             bos.close();
             if (socket != null) socket.close();
         }
+
 
 //        while ((data = br.readLine()) != null) {
 //            System.out.println(data);
