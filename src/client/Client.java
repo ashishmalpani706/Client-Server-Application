@@ -10,25 +10,29 @@ public class Client {
         this.scanner = new Scanner(System.in);
     }
     private void start() throws IOException {
-        String data;
-        String input, request;
-        int bytesRead;
-        int current;
-        FileOutputStream fos;
-        BufferedOutputStream bos;
+        String data, input, request;
+        int bytesRead, current;
         PrintWriter out = new PrintWriter(this.socket.getOutputStream(), true);
         BufferedReader br = new BufferedReader(new InputStreamReader(socket.getInputStream()));
         System.out.println("Please enter the name of the file: ");
         input = scanner.nextLine();
-        request = "SET "+input+" HTTP/1.0";
+        request = "SET /"+input+" HTTP/1.0";
         System.out.println("Sending "+request);
         out.println(request);
         out.flush();
         System.out.println(br.readLine());
+
+        socket.close();
+        this.socket = new Socket(InetAddress.getLocalHost(), 6000);
+        out = new PrintWriter(this.socket.getOutputStream(), true);
+        br = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+
         request = "GET /"+input+" HTTP/1.0";
         System.out.println("Sending "+request);
         out.println(request);
         out.flush();
+
+
         data = br.readLine();
         System.out.println(data);
 
@@ -41,8 +45,8 @@ public class Client {
 
             byte [] myByteArray  = new byte [6022386]; //can change file size if needed
             InputStream is = socket.getInputStream();
-            fos = new FileOutputStream(input);
-            bos = new BufferedOutputStream(fos);
+            FileOutputStream fos = new FileOutputStream(input);
+            BufferedOutputStream bos = new BufferedOutputStream(fos);
             bytesRead = is.read(myByteArray,0,myByteArray.length);
             current = bytesRead;
             do {
