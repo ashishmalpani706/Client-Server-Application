@@ -19,9 +19,8 @@ public class Server {
         }
     }
     private void listen() throws Exception {
-        String data;
+        String data, clientAddress;
         Socket client;
-        String clientAddress;
         BufferedReader br;
         PrintWriter out;
         FileInputStream fis;
@@ -39,19 +38,24 @@ public class Server {
                     System.out.println("Message from " + clientAddress + ": " + data);
                     System.out.println("Response: " +parse(data));
                     if (parse(data).equals(http400)) {
-                        out.println("Result: " + parse(data));
+                        out.println(parse(data));
                         out.flush();
                     }
                     else {
                         File myFile = new File(parse(data));
                         if (!myFile.exists()) {
                             System.out.println("Response: " +http404);
-                            out.println("Result: " + http404);
+                            out.println(http404);
                             out.flush();
                         }
                         else {
                             System.out.println("Response: " +http200);
-                            out.println("Result: " + http200);
+                            out.println(http200);
+                            out.flush();
+
+                            System.out.println("Content-Length: "+(int)myFile.length());
+                            out.println("Content-Length: "+(int)myFile.length());
+                            out.println("");
                             out.flush();
 
                             byte [] myByteArray  = new byte [(int)myFile.length()];
@@ -63,7 +67,6 @@ public class Server {
                             os.write(myByteArray,0,myByteArray.length);
                             os.flush();
                             System.out.println("Finished transfer!");
-
                             bis.close();
                             os.close();
                             client.close();
@@ -86,7 +89,7 @@ public class Server {
             Matcher m = p.matcher(request);
             if (m.find()) {
                 fileName = m.group();
-                return fileName.substring(0,fileName.length() - 1).trim();
+                return fileName.substring(2,fileName.length() - 1).trim();
             }
         }
         else {
